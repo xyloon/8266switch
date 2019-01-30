@@ -96,9 +96,36 @@ function pageHandler(req, res) {
       'Content-Type': 'image/png'
     });
     res.end(imageOn);
+  }else if(url_parsed.pathname=="/state"){
+    res.writeHead(200, {
+      'Content-Type': 'text/plain'
+    });
+    res.end(JSON.stringify({'state': switchState} ));
+  }else if (url_parsed.pathname=="/on") {
+    res.writeHead(200, {
+      'Content-Type': 'text/plain'
+    });
+    setTimeout("changeSwitchState('on');", 10);
+    res.end(JSON.stringify({'requested_state': 'on'} ));
+  }else if (url_parsed.pathname=="/off") {
+    res.writeHead(200, {
+      'Content-Type': 'text/plain'
+    });
+    setTimeout("changeSwitchState('off');", 10);
+    res.end(JSON.stringify({'requested_state': 'off'} ));
   }else{
     res.writeHead(404, {'Content-Type': 'text/plain'});
     res.end("404: Page "+url_parsed.pathname+" not found");
+  }
+}
+
+function changeSwitchState(targetState){
+  if (switchState != targetState){
+    digitalWrite(0, targetState == onOffCheckString);
+    switchState = targetState;
+    onSelectedString = (switchState == 'on'?  "selected" : "");
+    offSelectedString = (switchState == 'off'? "selected" : "");
+    setTimeout("broadcast(switchState );", 10);
   }
 }
 
@@ -106,13 +133,7 @@ function pageHandler(req, res) {
 function wsHandler(ws) {
   clients.push(ws);
   ws.on('message', msg => {
-    if (switchState != msg){
-      digitalWrite(0, msg == onOffCheckString);
-      switchState = msg;
-      onSelectedString = (switchState == 'on'?  "selected" : "");
-      offSelectedString = (switchState == 'off'? "selected" : "");
-      setTimeout("broadcast(switchState );", 10);
-    }
+    changeSwitchState(msg);
   });
   ws.on('close', evt => {
     var x = clients.indexOf(ws);
