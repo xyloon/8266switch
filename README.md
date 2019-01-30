@@ -53,5 +53,16 @@ source는 [여기](https://www.espruino.com/WiFi+Websocket+Server) 를 참고하
 ![web on screen ](/images/web_on_screen.png)
 
 
+## Simple RESTful API
+
+원래는 상태 변경에 대해서는 POST나 PUT을 쓰지만, 귀차니즘으로 모두 GET method로 API를 mapping하였다.
+
+
+기능    | URI    | Method   | 용례
+:-------|:--------:|:------ | :-------
+상태조회 | http://IP/state | GET  | curl  http://IP/state
+On      | http://IP/on  | GET  | curl http://IP/on
+Off     | http://IP/off | GET  | curl http://IP/off
+
 
 
