@@ -62,6 +62,9 @@ window.onload = () => {
   relay.onchange = evt => {
     ws.send(relay.value);
   };
+  imgSwitch.onclick = evt => {
+    ws.send((imgSwitch.alt == "on" ? "off" : "on"));
+  };
 };
 </script>
 </head>
