@@ -1,3 +1,5 @@
+require("ESP8266").setCPUFreq(80); //for exp8266-01
+
 var wifi = require('Wifi');
 
 var clients = [];
